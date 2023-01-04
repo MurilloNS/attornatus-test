@@ -1,6 +1,8 @@
 package com.example.attornatus.test.entities;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -15,13 +17,20 @@ public class Pessoa {
 	private String nome;
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate nascimento;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "pessoa_endereco", joinColumns = @JoinColumn(name = "pessoa_id"), inverseJoinColumns = @JoinColumn(name = "endereco_id"))
+	private List<Endereco> enderecos = new ArrayList<>();
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "enderecoPrincipal", referencedColumnName = "id")
+	private Endereco enderecoPrincipal;
 
 	public Pessoa() {
 	}
 
-	public Pessoa(String nome, LocalDate nascimento) {
+	public Pessoa(String nome, LocalDate nascimento, Endereco enderecoPrincipal) {
 		this.nome = nome;
 		this.nascimento = nascimento;
+		this.enderecoPrincipal = enderecoPrincipal;
 	}
 
 	public Long getId() {
@@ -46,5 +55,21 @@ public class Pessoa {
 
 	public void setNascimento(LocalDate nascimento) {
 		this.nascimento = nascimento;
+	}
+
+	public List<Endereco> getEnderecos() {
+		return enderecos;
+	}
+
+	public Endereco getEnderecoPrincipal() {
+		return enderecoPrincipal;
+	}
+
+	public void setEnderecoPrincipal(Endereco enderecoPrincipal) {
+		this.enderecoPrincipal = enderecoPrincipal;
+	}
+
+	public void addEndereco(Endereco enderecos) {
+		this.enderecos.add(enderecos);
 	}
 }

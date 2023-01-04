@@ -1,6 +1,11 @@
 package com.example.attornatus.test.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_enderecos")
@@ -12,6 +17,9 @@ public class Endereco {
 	private String cep;
 	private Integer numero;
 	private String cidade;
+	@ManyToMany(mappedBy = "enderecos")
+	@JsonIgnore
+	private List<Pessoa> pessoas = new ArrayList<>();
 
 	public Endereco() {
 	}
@@ -61,5 +69,9 @@ public class Endereco {
 
 	public void setCidade(String cidade) {
 		this.cidade = cidade;
+	}
+
+	public List<Pessoa> getPessoas() {
+		return pessoas;
 	}
 }
